@@ -8,9 +8,10 @@ LABEL maintainer="James Gebbie-Rayet <james.gebbie@stfc.ac.uk>"
 USER root
 
 # Install Wham.
-RUN cd /opt
-RUN wget http://membrane.urmc.rochester.edu/sites/default/files/wham/wham-release-2.0.10.2.tgz
-RUN tar xvf wham-release-2.0.10.2.tgz && \
+RUN cd /opt && \
+    mkdir wham && \
+    wget http://membrane.urmc.rochester.edu/sites/default/files/wham/wham-release-2.0.10.2.tgz
+RUN tar xvf wham-release-2.0.10.2.tgz -C wham --strip-components=1 && \
     rm wham-release-2.0.10.2.tgz && \
     cd wham/wham && \
     make clean && \
