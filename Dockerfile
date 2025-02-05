@@ -22,9 +22,6 @@ RUN cd /opt && \
 USER $NB_USER
 WORKDIR $HOME
 
-# Install nb env deps
-RUN pip install jupyterhub-tmpauthenticator
-
 # Install workshop deps
 RUN conda install ipywidgets nglview pandas numpy matplotlib -y
 RUN conda install -c conda-forge ambertools compilers -y
