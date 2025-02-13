@@ -1,8 +1,11 @@
 # Start with BioSim base image.
 ARG BASE_IMAGE=latest
-FROM harbor.stfc.ac.uk/biosimulation-cloud/biosim-jupyter-base:$BASE_IMAGE
+FROM ghcr.io/jimboid/biosim-jupyter-base:$BASE_IMAGE
 
 LABEL maintainer="James Gebbie-Rayet <james.gebbie@stfc.ac.uk>"
+LABEL org.opencontainers.image.source=https://github.com/jimboid/biosim-qmmm-workshop
+LABEL org.opencontainers.image.description="A container environment for the ccpbiosim workshop on QM/MM."
+LABEL org.opencontainers.image.licenses=MIT
 
 # Root to install "rooty" things.
 USER root
