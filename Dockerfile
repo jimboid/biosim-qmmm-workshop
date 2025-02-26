@@ -1,11 +1,13 @@
 # Start with BioSim base image.
 ARG BASE_IMAGE=latest
-FROM ghcr.io/jimboid/biosim-jupyter-base:$BASE_IMAGE
+FROM ghcr.io/jimboid/biosim-jupyterhub-base:$BASE_IMAGE
 
 LABEL maintainer="James Gebbie-Rayet <james.gebbie@stfc.ac.uk>"
 LABEL org.opencontainers.image.source=https://github.com/jimboid/biosim-qmmm-workshop
 LABEL org.opencontainers.image.description="A container environment for the ccpbiosim workshop on QM/MM."
 LABEL org.opencontainers.image.licenses=MIT
+
+ARG TARGETPLATFORM
 
 # Root to install "rooty" things.
 USER root
@@ -26,8 +28,12 @@ USER $NB_USER
 WORKDIR $HOME
 
 # Install workshop deps
-RUN conda install ipywidgets nglview pandas numpy matplotlib -y
-RUN conda install -c conda-forge ambertools compilers -y
+RUN conda install ipywidgets nglview pandas numpy matplotlib compilers -y
+RUN if [ "$TARGETPLATFORM" = "linux/amd64" ]; then \
+      conda install conda-forge::ambertools -y; \
+    elif [ "$TARGETPLATFORM" = "linux/arm64" ]; then \
+      conda install conda-forge/osx-arm64::ambertools -y; \
+    fi
 
 # Export important paths.
 ENV AMBERHOME=/opt/conda
