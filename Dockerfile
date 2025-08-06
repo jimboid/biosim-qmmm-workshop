@@ -29,7 +29,7 @@ WORKDIR $HOME
 
 # Install workshop deps
 RUN conda install ipywidgets nglview pandas numpy matplotlib compilers -y
-RUN conda install conda-forge::ambertools -y; \
+RUN conda install conda-forge::ambertools -y
 
 # Export important paths.
 ENV AMBERHOME=/opt/conda
