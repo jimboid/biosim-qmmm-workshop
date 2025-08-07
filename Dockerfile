@@ -8,7 +8,7 @@ LABEL org.opencontainers.image.description="A container environment for the ccpb
 LABEL org.opencontainers.image.licenses=MIT
 
 ARG AMBER_DL_PATH=null
-ARG AMBER_VERSION=25
+ARG AMBER_VERSION=24
 ENV AMBER_VERSION=${AMBER_VERSION}
 
 # Install workshop deps
