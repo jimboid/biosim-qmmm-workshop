@@ -18,6 +18,7 @@ RUN conda install ipywidgets nglview pandas numpy scipy matplotlib compilers -y
 # Root to install "rooty" things.
 USER root
 
+RUN sudo apt update
 RUN sudo apt install libstdc++-14-dev
 
 # Install Wham.
