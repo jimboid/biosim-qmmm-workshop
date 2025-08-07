@@ -7,13 +7,7 @@ LABEL org.opencontainers.image.source=https://github.com/jimboid/biosim-qmmm-wor
 LABEL org.opencontainers.image.description="A container environment for the ccpbiosim workshop on QM/MM."
 LABEL org.opencontainers.image.licenses=MIT
 
-ARG AMBER_DL_PATH=null
-ARG AMBER_VERSION=24
-ENV AMBER_VERSION=${AMBER_VERSION}
-
-# Install workshop deps
-RUN conda install ipywidgets nglview pandas numpy scipy matplotlib compilers -y
-#RUN conda install conda-forge::ambertools -y
+ARG TARGETPLATFORM
 
 # Root to install "rooty" things.
 USER root
@@ -29,37 +23,20 @@ RUN cd /opt && \
     make &&\
     chown -R $NB_USER:$NB_GID /opt/wham
 
-# Download, unzip and cd into the specified AMBER source.
-WORKDIR /tmp
-RUN wget --quiet $AMBER_DL_PATH/ambertools${AMBER_VERSION}.tar.bz2 && \
-    chown ${SYSTEM_UID}:${SYSTEM_GID} ambertools${AMBER_VERSION}.tar.bz2 && \
-    mkdir /tmp/amber${AMBER_VERSION}_src && \
-    tar xvjf ambertools${AMBER_VERSION}.tar.bz2 -C /tmp/amber${AMBER_VERSION}_src --strip-components 1 > /dev/null && \
-    rm ambertools${AMBER_VERSION}.tar.bz2
-WORKDIR /tmp/amber${AMBER_VERSION}_src
-
-# Update AMBER source.
-RUN ./update_amber --update
-
-# Make a build dir in /tmp.
-RUN mkdir /tmp/build
-WORKDIR /tmp/build
-
-# Build AMBER without mpi and without cuda.
-RUN cmake /tmp/amber${AMBER_VERSION}_src -DCMAKE_INSTALL_PREFIX=/opt/amber${AMBER_VERSION} -DBUILD_PYTHON=TRUE -DCMAKE_INSTALL_RPATH_USE_LINK_PATH=TRUE -DDOWNLOAD_MINICONDA=FALSE -DCOMPILER=MANUAL -DBUILD_GUI=FALSE -DCOMPILER=GNU -DOPENMP=TRUE -DCUDA=FALSE -DMPI=FALSE -DUSE_FFT=True -DBUILD_DEPRECATED=False -DBUILD_INDEV=False -DBUILD_PERL=True -DOPTIMIZE=True
-RUN make -j8
-RUN make install
-
-# Cleanup.
-RUN rm -r /tmp/amber${AMBER_VERSION}_src 
-
 # Switch to jovyan user.
 USER $NB_USER
 WORKDIR $HOME
 
+# Install workshop deps
+RUN conda install ipywidgets nglview pandas numpy matplotlib compilers -y
+RUN if [ "$TARGETPLATFORM" = "linux/amd64" ]; then \
+      conda install conda-forge::ambertools -y; \
+    elif [ "$TARGETPLATFORM" = "linux/arm64" ]; then \
+      mamba install conda-forge/osx-arm64::ambertools -y; \
+    fi
+
 # Export important paths.
-ENV AMBERHOME=/opt/amber${AMBER_VERSION}
-ENV PATH="$PATH:/opt/amber${AMBER_VERSION}/bin"
+ENV AMBERHOME=/opt/conda
 ENV WHAM_HOME=/opt/wham
 
 # Add all of the workshop files to the home directory
