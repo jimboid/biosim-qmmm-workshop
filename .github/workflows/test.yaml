@@ -36,6 +36,7 @@ jobs:
             wait; \
             cpptraj < ../data/make_adiab_trj.in &> make_adiab_trj.log; \
             wait; \
+            cd ..; \
             pip install pytest nbmake; \
             find . -name '*.ipynb' | pytest --nbmake --nbmake-timeout=3600; "
 
