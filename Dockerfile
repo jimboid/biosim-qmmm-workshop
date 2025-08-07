@@ -31,11 +31,11 @@ RUN cd /opt && \
 
 # Download, unzip and cd into the specified AMBER source.
 WORKDIR /tmp
-RUN wget $AMBER_DL_PATH/AmberTools${AMBER_VERSION}.tar.bz2 && \
-    chown ${SYSTEM_UID}:${SYSTEM_GID} AmberTools${AMBER_VERSION}.tar.bz2 && \
+RUN wget $AMBER_DL_PATH/ambertools${AMBER_VERSION}.tar.bz2 && \
+    chown ${SYSTEM_UID}:${SYSTEM_GID} ambertools${AMBER_VERSION}.tar.bz2 && \
     mkdir /tmp/amber${AMBER_VERSION}_src && \
-    tar xvjf AmberTools${AMBER_VERSION}.tar.bz2 -C /tmp/amber${AMBER_VERSION}_src --strip-components 1 && \
-    rm AmberTools${AMBER_VERSION}.tar.bz2
+    tar xvjf ambertools${AMBER_VERSION}.tar.bz2 -C /tmp/amber${AMBER_VERSION}_src --strip-components 1 && \
+    rm ambertools${AMBER_VERSION}.tar.bz2
 WORKDIR /tmp/amber${AMBER_VERSION}_src
 
 # Update AMBER source.
