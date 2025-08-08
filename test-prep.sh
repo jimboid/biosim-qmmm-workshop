@@ -4,6 +4,7 @@ ln -s ../data/md5.rst md.rst
 bash ../scripts/setup_umb_samp.sh
 bash run_umb_samp.sh
 wait
+bash ../scripts/run_wham.sh \
 cpptraj < ../data/make_us_trj.in &> make_us_trj.log
 wait
 cd ..
@@ -14,3 +15,4 @@ bash ../scripts/run_adiab_all.sh
 wait
 cpptraj < ../data/make_adiab_trj.in &> make_adiab_trj.log
 wait
+cd ..
