@@ -26,9 +26,13 @@ jobs:
             bash ../scripts/setup_umb_samp.sh; \
             bash run_umb_samp.sh; \
             wait; \
+            ls; \
             bash ../scripts/run_wham.sh; \
+            wait; \
+            ls; \
             $AMBERHOME/bin/cpptraj < ../data/make_us_trj.in &> make_us_trj.log; \
             wait; \
+            ls; \
             cd ..; \
             mkdir adiab5; \
             cd adiab5; \
